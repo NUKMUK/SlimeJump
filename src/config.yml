@@ -1,0 +1,12 @@
+slime: true
+slimeheight: 20
+slimelength: 1
+sponge: false
+spongeheight: 5
+spongelength: 5
+titlecooldown: false
+particletime: 10
+falldmg: 4 #Increase for less fall damage
+limeclay: false
+clay-speed: 0.7
+normal-speed: 0.2
