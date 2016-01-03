@@ -14,16 +14,13 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
-/**
- * Created by rasmu on 20.10.2015.
- */
 @SuppressWarnings("deprecation")
 public class SlimeJump extends JavaPlugin implements Listener {
 
     private ArrayList<String> cooldown = new ArrayList<String>();
-    Double pt = getConfig().getDouble("particletime");
+    private Double pt = getConfig().getDouble("particletime");
 
-    int taskId = 0;
+    private int taskId = 0;
 
     public void onEnable() {
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
@@ -45,9 +42,9 @@ public class SlimeJump extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
-        if (getConfig().getBoolean("slime") == true) {
+        if (getConfig().getBoolean("slime")) {
             if (e.getTo().getBlock().getRelative(BlockFace.DOWN).getType() == Material.SLIME_BLOCK) {
-                if(e.getPlayer().isSneaking() == false) {
+                if(!e.getPlayer().isSneaking()) {
                     if (!cooldown.contains(e.getPlayer().getName())) {
                         cooldown.add(e.getPlayer().getName());
                         final Player p = e.getPlayer();
@@ -62,7 +59,7 @@ public class SlimeJump extends JavaPlugin implements Listener {
                             int count = 0;
 
                             public void run() {
-                                if (getConfig().getBoolean("titlecooldown") == true) {
+                                if (getConfig().getBoolean("titlecooldown")) {
                                     if (count == pt - 15) {
                                         p.sendTitle(ChatColor.GREEN + "                              |||", "");
                                     } else if (count == pt - 10) {
@@ -75,12 +72,12 @@ public class SlimeJump extends JavaPlugin implements Listener {
 
                                     }
                                 }
-                                p.getWorld().playEffect(p.getLocation().add(0, 3, 0), Effect.CLOUD, 1);
-                                p.getWorld().playEffect(p.getLocation().add(0, 3, 0), Effect.COLOURED_DUST, 1);
-                                p.getWorld().playEffect(p.getLocation().add(0, 1, 0), Effect.FIREWORKS_SPARK, 1);
-                                p.getWorld().playEffect(p.getLocation().add(0, 2, 0), Effect.FIREWORKS_SPARK, 0);
-                                p.getWorld().playEffect(p.getLocation().add(0, 3, 0), Effect.FIREWORKS_SPARK, 1);
-                                p.getWorld().playEffect(p.getLocation().add(0, -2, 0), Effect.FLAME, 0);
+                                p.getWorld().playEffect(p.getEyeLocation(), Effect.CLOUD, 1);
+                                p.getWorld().playEffect(p.getEyeLocation(), Effect.COLOURED_DUST, 1);
+                                p.getWorld().playEffect(p.getEyeLocation(), Effect.FIREWORKS_SPARK, 1);
+                                p.getWorld().playEffect(p.getEyeLocation(), Effect.FIREWORKS_SPARK, 0);
+                                p.getWorld().playEffect(p.getEyeLocation(), Effect.FIREWORKS_SPARK, 1);
+                                p.getWorld().playEffect(p.getEyeLocation(), Effect.FLAME, 0);
                                 if (count >= getConfig().getInt("particletime")) {
                                     Bukkit.getScheduler().cancelTask(taskId);
                                     cooldown.remove(p.getName());
@@ -94,9 +91,9 @@ public class SlimeJump extends JavaPlugin implements Listener {
             }
         }
 
-        if (getConfig().getBoolean("sponge") == true) {
+        if (getConfig().getBoolean("sponge")) {
             if (e.getTo().getBlock().getRelative(BlockFace.DOWN).getType() == Material.SPONGE || e.getTo().getBlock().getRelative(BlockFace.UP).getType() == Material.SPONGE) {
-                if(e.getPlayer().isSneaking() == false) {
+                if(!e.getPlayer().isSneaking()) {
                     if (!cooldown.contains(e.getPlayer().getName())) {
                         cooldown.add(e.getPlayer().getName());
                         final Player p = e.getPlayer();
@@ -111,7 +108,7 @@ public class SlimeJump extends JavaPlugin implements Listener {
                             int count = 0;
 
                             public void run() {
-                                if (getConfig().getBoolean("titlecooldown") == true) {
+                                if (getConfig().getBoolean("titlecooldown")) {
                                     if (count == pt - 15) {
                                         p.sendTitle(ChatColor.YELLOW + "                              |||", "");
                                     } else if (count == pt - 10) {
@@ -123,12 +120,12 @@ public class SlimeJump extends JavaPlugin implements Listener {
                                         cooldown.remove(p.getName());
                                     }
                                 }
-                                p.getWorld().playEffect(p.getLocation().add(0, 1.5, 0), Effect.CLOUD, 1);
-                                p.getWorld().playEffect(p.getLocation().add(0, 1.5, 0), Effect.COLOURED_DUST, 1);
-                                p.getWorld().playEffect(p.getLocation().add(0, 1.5, 0), Effect.FIREWORKS_SPARK, 1);
-                                p.getWorld().playEffect(p.getLocation().add(0, 1.5, 0), Effect.FIREWORKS_SPARK, 0);
-                                p.getWorld().playEffect(p.getLocation().add(0, 1.5, 0), Effect.FIREWORKS_SPARK, 1);
-                                p.getWorld().playEffect(p.getLocation().add(0, 1.5, 0), Effect.FLAME, 0);
+                                p.getWorld().playEffect(p.getEyeLocation(), Effect.CLOUD, 1);
+                                p.getWorld().playEffect(p.getEyeLocation(), Effect.COLOURED_DUST, 1);
+                                p.getWorld().playEffect(p.getEyeLocation(), Effect.FIREWORKS_SPARK, 1);
+                                p.getWorld().playEffect(p.getEyeLocation(), Effect.FIREWORKS_SPARK, 0);
+                                p.getWorld().playEffect(p.getEyeLocation(), Effect.FIREWORKS_SPARK, 1);
+                                p.getWorld().playEffect(p.getEyeLocation(), Effect.FLAME, 0);
                                 if (count >= getConfig().getInt("particletime") - 1) {
                                     Bukkit.getScheduler().cancelTask(taskId);
                                     cooldown.remove(p.getName());
@@ -155,7 +152,7 @@ public class SlimeJump extends JavaPlugin implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
 
-        if (getConfig().getBoolean("limeclay") == true) {
+        if (getConfig().getBoolean("limeclay")) {
 
             if (e.getTo().getBlock().getRelative(BlockFace.DOWN).getType() == Material.STAINED_CLAY) {
                 Block block = e.getTo().getBlock().getRelative(BlockFace.DOWN);
@@ -167,7 +164,7 @@ public class SlimeJump extends JavaPlugin implements Listener {
                 }
             }
         }
-        if (getConfig().getBoolean("limeclay") == true) {
+        if (getConfig().getBoolean("limeclay")) {
             if (e.getTo().getBlock().getRelative(BlockFace.DOWN).getType() != Material.STAINED_CLAY) {
                 Block block = e.getTo().getBlock().getRelative(BlockFace.DOWN);
                 Wool wool = new Wool(block.getType(), block.getData());
