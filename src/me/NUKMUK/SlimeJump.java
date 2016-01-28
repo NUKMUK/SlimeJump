@@ -49,7 +49,7 @@ public class SlimeJump extends JavaPlugin implements Listener {
                         cooldown.add(e.getPlayer().getName());
                         final Player p = e.getPlayer();
                         Double slh = this.getConfig().getDouble("slimeheight") / 10;
-                        p.setVelocity(e.getPlayer().getLocation().getDirection().multiply(getConfig().getInt("slimelength")));
+                        p.setVelocity(e.getPlayer().getLocation().getDirection().multiply(getConfig().getDouble("slimelength")));
                         p.setVelocity(new Vector(e.getPlayer().getVelocity().getX(), slh, e.getPlayer().getVelocity().getZ()));
                         Location l = e.getPlayer().getLocation();
                         p.getWorld().playEffect(e.getPlayer().getLocation().getBlock().getLocation().add(0, -0.5, 0), Effect.MOBSPAWNER_FLAMES, 1);
@@ -98,7 +98,7 @@ public class SlimeJump extends JavaPlugin implements Listener {
                         cooldown.add(e.getPlayer().getName());
                         final Player p = e.getPlayer();
                         Double sph = this.getConfig().getDouble("spongeheight") / 10;
-                        p.setVelocity(e.getPlayer().getLocation().getDirection().multiply(getConfig().getInt("spongelength")));
+                        p.setVelocity(e.getPlayer().getLocation().getDirection().multiply(getConfig().getDouble("spongelength")));
                         p.setVelocity(new Vector(e.getPlayer().getVelocity().getX(), sph, e.getPlayer().getVelocity().getZ()));
                         Location l = e.getPlayer().getLocation();
                         p.getWorld().playEffect(e.getPlayer().getLocation().getBlock().getLocation().add(0, -0.5, 0), Effect.MOBSPAWNER_FLAMES, 1);
