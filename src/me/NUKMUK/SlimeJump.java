@@ -14,7 +14,6 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("deprecation")
 public class SlimeJump extends JavaPlugin implements Listener {
 
     private ArrayList<String> cooldown = new ArrayList<String>();
@@ -42,9 +41,10 @@ public class SlimeJump extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
+        // slime jump
         if (getConfig().getBoolean("slime")) {
             if (e.getTo().getBlock().getRelative(BlockFace.DOWN).getType() == Material.SLIME_BLOCK) {
-                if(!e.getPlayer().isSneaking()) {
+                if (!e.getPlayer().isSneaking()) {
                     if (!cooldown.contains(e.getPlayer().getName())) {
                         cooldown.add(e.getPlayer().getName());
                         final Player p = e.getPlayer();
@@ -55,19 +55,20 @@ public class SlimeJump extends JavaPlugin implements Listener {
                         p.getWorld().playEffect(e.getPlayer().getLocation().getBlock().getLocation().add(0, -0.5, 0), Effect.MOBSPAWNER_FLAMES, 1);
                         p.playEffect(e.getPlayer().getLocation().add(0, -2, 0), Effect.GHAST_SHOOT, 0);
 
+
                         taskId = this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
                             int count = 0;
 
                             public void run() {
                                 if (getConfig().getBoolean("titlecooldown")) {
                                     if (count == pt - 15) {
-                                        p.sendTitle(ChatColor.GREEN + "                              |||", "");
+                                        p.sendTitle(ChatColor.GREEN + "                              |||", "", 10, 70, 20);
                                     } else if (count == pt - 10) {
-                                        p.sendTitle(ChatColor.GREEN + "                              ||", "");
+                                        p.sendTitle(ChatColor.GREEN + "                              ||", "", 10, 70, 20);
                                     } else if (count == pt - 5) {
-                                        p.sendTitle(ChatColor.GREEN + "                              |", "");
+                                        p.sendTitle(ChatColor.GREEN + "                              |", "", 10, 70, 20);
                                     } else if (count == pt) {
-                                        p.sendTitle("", "");
+                                        p.sendTitle("", "", 10, 70, 20);
                                         cooldown.remove(p.getName());
 
                                     }
@@ -91,9 +92,10 @@ public class SlimeJump extends JavaPlugin implements Listener {
             }
         }
 
+        // sponge jump
         if (getConfig().getBoolean("sponge")) {
             if (e.getTo().getBlock().getRelative(BlockFace.DOWN).getType() == Material.SPONGE || e.getTo().getBlock().getRelative(BlockFace.UP).getType() == Material.SPONGE) {
-                if(!e.getPlayer().isSneaking()) {
+                if (!e.getPlayer().isSneaking()) {
                     if (!cooldown.contains(e.getPlayer().getName())) {
                         cooldown.add(e.getPlayer().getName());
                         final Player p = e.getPlayer();
@@ -101,8 +103,8 @@ public class SlimeJump extends JavaPlugin implements Listener {
                         p.setVelocity(e.getPlayer().getLocation().getDirection().multiply(getConfig().getDouble("spongelength")));
                         p.setVelocity(new Vector(e.getPlayer().getVelocity().getX(), sph, e.getPlayer().getVelocity().getZ()));
                         Location l = e.getPlayer().getLocation();
-                        p.getWorld().playEffect(e.getPlayer().getLocation().getBlock().getLocation().add(0, -0.5, 0), Effect.MOBSPAWNER_FLAMES, 1);
-                        p.playEffect(e.getPlayer().getLocation().add(0, -2, 0), Effect.GHAST_SHOOT, 0);
+                        p.getWorld().playEffect(l.getBlock().getLocation().add(0, -0.5, 0), Effect.MOBSPAWNER_FLAMES, 1);
+                        p.playEffect(l.add(0, -2, 0), Effect.GHAST_SHOOT, 0);
 
                         taskId = this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
                             int count = 0;
@@ -110,13 +112,13 @@ public class SlimeJump extends JavaPlugin implements Listener {
                             public void run() {
                                 if (getConfig().getBoolean("titlecooldown")) {
                                     if (count == pt - 15) {
-                                        p.sendTitle(ChatColor.YELLOW + "                              |||", "");
+                                        p.sendTitle(ChatColor.YELLOW + "                              |||", "", 10, 70, 20);
                                     } else if (count == pt - 10) {
-                                        p.sendTitle(ChatColor.YELLOW + "                              ||", "");
+                                        p.sendTitle(ChatColor.YELLOW + "                              ||", "", 10, 70, 20);
                                     } else if (count == pt - 5) {
-                                        p.sendTitle(ChatColor.YELLOW + "                              |", "");
+                                        p.sendTitle(ChatColor.YELLOW + "                              |", "", 10, 70, 20);
                                     } else if (count >= pt - 1) {
-                                        p.sendTitle("", "");
+                                        p.sendTitle("", "", 10, 70, 20);
                                         cooldown.remove(p.getName());
                                     }
                                 }
@@ -139,16 +141,22 @@ public class SlimeJump extends JavaPlugin implements Listener {
         }
     }
 
+    // reduce fall damage
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
-            if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
-                e.setDamage(e.getDamage() / getConfig().getInt("falldmg"));
+            if (e.getCause() == EntityDamageEvent.DamageCause.FALL || e.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL) {
+                if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                    e.setDamage(e.getDamage() / getConfig().getInt("falldmg"));
+                } else if (e.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL) {
+                    e.setDamage(e.getDamage() / (getConfig().getInt("falldmg") * 10));
+                }
             }
         }
     }
 
+    // walking on lime clay gives speed boost
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
 

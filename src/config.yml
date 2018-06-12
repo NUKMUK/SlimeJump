@@ -6,7 +6,7 @@ spongeheight: 5
 spongelength: 5
 titlecooldown: false
 particletime: 10
-falldmg: 1 #Increase for less fall damage
-limeclay: false
-clay-speed: 0.7
-normal-speed: 0.2
+falldmg: 1 # Increase for less fall damage
+limeclay: false # Walking on lime clay gives speed boost
+clay-speed: 0.7 # Speed when walking on clay
+normal-speed: 0.2 # Default walking speed 0.2
